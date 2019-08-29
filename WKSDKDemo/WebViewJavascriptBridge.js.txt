@@ -1,0 +1,161 @@
+(function() {
+    if (window.HundsunBridge) {
+        return
+
+    }
+    var messagingIframe;
+    var sendMessageQueue = [];
+    var receiveMessageQueue = [];
+    var messageHandlers = {};
+    var CUSTOM_PROTOCOL_SCHEME = "hundsun";
+    var responseCallbacks = {};
+    var uniqueId = 1;
+    function createQueueReadyIframe(doc) {
+        messagingIframe = doc.createElement("iframe");
+        messagingIframe.style.display = "none";
+        doc.documentElement.appendChild(messagingIframe)
+
+    }
+    function isAndroid() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isA = ua.indexOf("android") > -1;
+        if (isA) {
+            return true
+
+        }
+        return false
+
+    }
+    function isIphone() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isIph = ua.indexOf("iphone") > -1;
+        if (isIph) {
+            return true
+
+        }
+        return false
+
+    }
+    function init(messageHandler) {
+        if (HundsunBridge.messageHandler) {
+            throw new Error("HundsunBridge.init called twice")
+
+        }
+        HundsunBridge.messageHandler = messageHandler;
+        var receivedMessages = receiveMessageQueue;
+        receiveMessageQueue = null;
+        for (var i = 0; i < receivedMessages.length; i++) {
+            dispatchMessageFromNative(receivedMessages[i])
+
+        }
+
+    }
+    function registerHandler(handlerName, handler) {
+        messageHandlers[handlerName] = handler
+
+    }
+    function callHandler(handlerName, data, responseCallback) {
+        doSend({
+            handlerName: handlerName,
+            data: data
+
+        },
+        responseCallback)
+
+    }
+    function doSend(message, responseCallback) {
+        if (responseCallback) {
+            var callbackId = "cb_" + (uniqueId++) + "_" + new Date().getTime();
+            responseCallbacks[callbackId] = responseCallback;
+            message.callbackId = callbackId
+
+        }
+        sendMessageQueue.push(message);
+        messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + "://queueMessage/"
+
+    }
+    function fetchQueue() {
+        var messageQueueString = JSON.stringify(sendMessageQueue);
+        sendMessageQueue = [];
+        if (isIphone()) {
+            return messageQueueString
+
+        } else if (isAndroid()) {
+            messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + "://return/fetchQueue/" + encodeURIComponent(messageQueueString)
+
+        }
+
+    }
+    function dispatchMessageFromNative(messageJSON) {
+        setTimeout(function() {
+            var message = JSON.parse(messageJSON);
+            var responseCallback;
+            if (message.responseId) {
+                responseCallback = responseCallbacks[message.responseId];
+                if (!responseCallback) {
+                    return
+
+                }
+                responseCallback(message.responseData);
+                delete responseCallbacks[message.responseId]
+
+            } else {
+                if (message.callbackId) {
+                    var callbackResponseId = message.callbackId;
+                    responseCallback = function(responseData) {
+                        doSend({
+                            responseId: callbackResponseId,
+                            responseData: responseData
+
+                        })
+
+                    }
+
+                }
+                var handler = HundsunBridge.messageHandler;
+                if (message.handlerName) {
+                    handler = messageHandlers[message.handlerName]
+
+                }
+                try {
+                    handler(message.data, responseCallback)
+
+                } catch(exception) {
+                    if (typeof console != "undefined") {
+                        console.log("HundsunBridge: WARNING: javascript handler threw.", message, exception)
+
+                    }
+
+                }
+
+            }
+
+        })
+
+    }
+    function handleMessageFromNative(messageJSON) {
+        if (receiveMessageQueue) {
+            receiveMessageQueue.push(messageJSON)
+
+        } else {
+            dispatchMessageFromNative(messageJSON)
+
+        }
+
+    }
+    var HundsunBridge = window.HundsunBridge = {
+        init: init,
+        registerHandler: registerHandler,
+        callHandler: callHandler,
+        fetchQueue: fetchQueue,
+        handleMessageFromNative: handleMessageFromNative
+
+    };
+    var doc = document;
+    createQueueReadyIframe(doc);
+    var readyEvent = doc.createEvent("Events");
+    readyEvent.initEvent("HundsunBridgeReady");
+    readyEvent.bridge = HundsunBridge;
+    doc.dispatchEvent(readyEvent)
+
+})();
