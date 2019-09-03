@@ -1,16 +1,40 @@
 PODS:
+  - AVOSCloud (11.4.7)
+  - Masonry (1.1.0)
+  - MBProgressHUD (1.0.0)
+  - "MBProgressHUD+Add (0.0.2)":
+    - MBProgressHUD (~> 1.0.0)
+  - MJExtension (3.0.15.1)
+  - ReactiveObjC (2.1.2)
   - WebViewJavascriptBridge (6.0.3)
 
 DEPENDENCIES:
+  - AVOSCloud
+  - Masonry
+  - "MBProgressHUD+Add (~> 0.0.2)"
+  - MJExtension
+  - ReactiveObjC (~> 2.1.2)
   - WebViewJavascriptBridge (~> 6.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AVOSCloud
+    - Masonry
+    - MBProgressHUD
+    - "MBProgressHUD+Add"
+    - MJExtension
+    - ReactiveObjC
     - WebViewJavascriptBridge
 
 SPEC CHECKSUMS:
+  AVOSCloud: e1257f9a7c28e04ae8642d554a37654e8392d1b7
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  "MBProgressHUD+Add": 65c4d170c083a2a800ad4470d424ad5978f324c3
+  MJExtension: 19bc33ce2eee2d319760f5622562cf581a6ff756
+  ReactiveObjC: 7b6782ae39f9ac0f57205c3b0c0b69b9dd7048c0
   WebViewJavascriptBridge: 7f5bc4d3581e672e8f32bd0f812d54bc69bb8e29
 
-PODFILE CHECKSUM: 6b6402e0f7fc168b7171a92053f2403b5c488fb9
+PODFILE CHECKSUM: 0cd9eb8949578e6d21ce1f9a4c4eb47c2b4aa28f
 
 COCOAPODS: 1.5.3

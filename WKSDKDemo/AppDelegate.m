@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "ViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -15,8 +15,15 @@
 @implementation AppDelegate
 
 
+- (void)initAVOSCloud{
+    [AVOSCloud setApplicationId:@"IJhTnFwGR17jMSbMchDk1kq8-gzGzoHsz" clientKey:@"SYxHQzNvcBgO2ePUXlyzI7iR"];
+    [AVOSCloud setAllLogsEnabled:YES];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [self initAVOSCloud];
+    [NSObject mj_referenceReplacedKeyWhenCreatingKeyValues:NO];
     //get the original user-agent of webview
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
     NSString *oldAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
@@ -27,8 +34,11 @@
     //regist the new agent
     NSDictionary *dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:newAgent, @"UserAgent", nil];
     [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
-    
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.rootViewController = [[UINavigationController alloc]initWithRootViewController:[[ViewController alloc]init]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+
     return YES;
 }
 

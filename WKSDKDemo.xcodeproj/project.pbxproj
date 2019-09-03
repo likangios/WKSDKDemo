@@ -16,6 +16,9 @@
 		8418F597230D9D4A00FEC6B6 /* PTFakeTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8418F596230D9D4A00FEC6B6 /* PTFakeTouch.framework */; };
 		8418F599230D9E1200FEC6B6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8418F598230D9E1200FEC6B6 /* IOKit.framework */; };
 		8435855E23181B730033CA5F /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8435855D23181B730033CA5F /* WebViewJavascriptBridge.js.txt */; };
+		84358563231C0AF80033CA5F /* SliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84358562231C0AF80033CA5F /* SliderViewController.m */; };
+		84358566231D640B0033CA5F /* CCNetworkMananger.m in Sources */ = {isa = PBXBuildFile; fileRef = 84358565231D640B0033CA5F /* CCNetworkMananger.m */; };
+		84358569231D64380033CA5F /* CodeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84358568231D64380033CA5F /* CodeModel.m */; };
 		A3F10B37CBCB585D67D60D10 /* libPods-WKSDKDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F580C218C6D1EEA4A6F138B9 /* libPods-WKSDKDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +37,13 @@
 		8418F596230D9D4A00FEC6B6 /* PTFakeTouch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PTFakeTouch.framework; sourceTree = "<group>"; };
 		8418F598230D9E1200FEC6B6 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOKit.framework; sourceTree = "<group>"; };
 		8435855D23181B730033CA5F /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
+		84358561231C0AF80033CA5F /* SliderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SliderViewController.h; sourceTree = "<group>"; };
+		84358562231C0AF80033CA5F /* SliderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SliderViewController.m; sourceTree = "<group>"; };
+		84358564231D640B0033CA5F /* CCNetworkMananger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCNetworkMananger.h; sourceTree = "<group>"; };
+		84358565231D640B0033CA5F /* CCNetworkMananger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCNetworkMananger.m; sourceTree = "<group>"; };
+		84358567231D64380033CA5F /* CodeModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CodeModel.h; sourceTree = "<group>"; };
+		84358568231D64380033CA5F /* CodeModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CodeModel.m; sourceTree = "<group>"; };
+		8435856B231D67700033CA5F /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		9C1BD05DFE1039F1B8CA891E /* Pods-WKSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WKSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WKSDKDemo/Pods-WKSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		F580C218C6D1EEA4A6F138B9 /* libPods-WKSDKDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WKSDKDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -94,9 +104,16 @@
 			children = (
 				8418F57E230C52D800FEC6B6 /* AppDelegate.h */,
 				8418F57F230C52D800FEC6B6 /* AppDelegate.m */,
+				8435856B231D67700033CA5F /* PrefixHeader.pch */,
 				8435855D23181B730033CA5F /* WebViewJavascriptBridge.js.txt */,
 				8418F581230C52D800FEC6B6 /* ViewController.h */,
 				8418F582230C52D800FEC6B6 /* ViewController.m */,
+				84358561231C0AF80033CA5F /* SliderViewController.h */,
+				84358562231C0AF80033CA5F /* SliderViewController.m */,
+				84358567231D64380033CA5F /* CodeModel.h */,
+				84358568231D64380033CA5F /* CodeModel.m */,
+				84358564231D640B0033CA5F /* CCNetworkMananger.h */,
+				84358565231D640B0033CA5F /* CCNetworkMananger.m */,
 				8418F584230C52D800FEC6B6 /* Main.storyboard */,
 				8418F587230C52DB00FEC6B6 /* Assets.xcassets */,
 				8418F589230C52DB00FEC6B6 /* LaunchScreen.storyboard */,
@@ -117,6 +134,7 @@
 				8418F577230C52D800FEC6B6 /* Sources */,
 				8418F578230C52D800FEC6B6 /* Frameworks */,
 				8418F579230C52D800FEC6B6 /* Resources */,
+				ADE3150EEFB6E15F8572935C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -196,6 +214,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		ADE3150EEFB6E15F8572935C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-WKSDKDemo/Pods-WKSDKDemo-resources.sh",
+				"${PODS_ROOT}/AVOSCloud/AVOS/AVOSCloud/AVOSCloud_Art.inc",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AVOSCloud_Art.inc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WKSDKDemo/Pods-WKSDKDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -203,9 +243,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84358569231D64380033CA5F /* CodeModel.m in Sources */,
 				8418F583230C52D800FEC6B6 /* ViewController.m in Sources */,
 				8418F58E230C52DB00FEC6B6 /* main.m in Sources */,
+				84358566231D640B0033CA5F /* CCNetworkMananger.m in Sources */,
 				8418F580230C52D800FEC6B6 /* AppDelegate.m in Sources */,
+				84358563231C0AF80033CA5F /* SliderViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,6 +397,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PREFIX_HEADER = WKSDKDemo/PrefixHeader.pch;
 				INFOPLIST_FILE = WKSDKDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -377,6 +421,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PREFIX_HEADER = WKSDKDemo/PrefixHeader.pch;
 				INFOPLIST_FILE = WKSDKDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
