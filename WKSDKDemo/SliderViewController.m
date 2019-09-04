@@ -260,8 +260,8 @@
 }
 - (void)moveToEnd:(CGFloat)endY currentY:(CGFloat)curY pointId:(NSInteger)pointId Height:(CGFloat)height{
     CGFloat randomTime = (float)(arc4random()%10) / 500.0;
-//    CGFloat  randomOffset = arc4random()%600;
-    CGFloat  randomOffset = 500;
+    CGFloat  randomOffset = arc4random()%300 + 200;
+//    CGFloat  randomOffset = 500;
     __block CGFloat currentY = curY;
     @weakify(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(randomTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
