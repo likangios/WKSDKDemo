@@ -9,19 +9,24 @@
 #import "SliderViewController.h"
 
 #import <WebViewJavascriptBridge.h>
+#import <WKWebViewJavascriptBridge.h>
 #import <PTFakeTouch/PTFakeMetaTouch.h>
 #import <WebKit/WebKit.h>
 #import "CCNetworkMananger.h"
 
 
 @interface SliderViewController ()<UIWebViewDelegate,WKUIDelegate,WKNavigationDelegate>
-@property(nonatomic,strong) UIWebView *webview;
+//@property(nonatomic,strong) UIWebView *webview;
+@property(nonatomic,strong) WKWebView *webview;
+
 @property(retain, nonatomic) UIView *containerView;
 
 @property(nonatomic,copy) void(^cancleBlock)(void);
 @property(nonatomic,copy) void(^sureBlock)(void);
 @property(nonatomic,assign) BOOL stop;
-@property(nonatomic,strong) WebViewJavascriptBridge *bridge;
+//@property(nonatomic,strong) WebViewJavascriptBridge *bridge;
+@property(nonatomic,strong) WKWebViewJavascriptBridge *bridge;
+
 @property(nonatomic,assign) NSInteger requestCount;
 @property(nonatomic,strong)   UIButton *countLabel;
 
@@ -92,16 +97,32 @@
         
     });
 }
-- (UIWebView *)webview{
+- (WKWebView *)webview{
     if (!_webview) {
-        _webview = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 300)];
+        _webview = [[WKWebView alloc]initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 300)];
         [self.view insertSubview:_webview atIndex:0];
         _webview.scrollView.bounces = NO;
-        _webview.delegate = self;
+        _webview.navigationDelegate = self;
         NSDate *date = [NSDate date];
         NSTimeInterval timeinterval = [date timeIntervalSince1970] * 1000;
         NSString *url = [NSString stringWithFormat:@"https://webcdn2.hsyuntai.com/page/app/hkyzh5_xh.html?t=%.f",timeinterval];
         [_webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+        
+        @weakify(self);
+        self.bridge = [WKWebViewJavascriptBridge bridgeForWebView:_webview handler:^(id data, WVJBResponseCallback responseCallback) {
+            @strongify(self);
+            CodeModel *model = [CodeModel mj_objectWithKeyValues:data[@"validResult"]];
+            [[[CCNetworkMananger shareInstance] AddCode:model] subscribeNext:^(id x) {
+                if ([x isKindOfClass:[NSError class]]) {
+                    NSError *error = (NSError *)x;
+                    NSLog(@"添加失败:%@",error);
+                }
+            } completed:^{
+                NSLog(@"添加完成");
+            }];
+            [self.webview reload];
+        }];
+        /*
         self.bridge = [WebViewJavascriptBridge bridgeForWebView:_webview handler:^(NSDictionary *data, WVJBResponseCallback responseCallback) {
             CodeModel *model = [CodeModel mj_objectWithKeyValues:data[@"validResult"]];
             [[[CCNetworkMananger shareInstance] AddCode:model] subscribeNext:^(id x) {
@@ -114,16 +135,18 @@
             }];
             [self.webview reload];
         }];
+         */
         [self.bridge setWebViewDelegate:self];
         [self.bridge registerHandler:@"sliderVerificationCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
-            NSLog(@"data：%@",data);
         }];
         
     }
     return _webview;
 }
 - (void)getAllCodeCount{
+    @weakify(self);
     [[[CCNetworkMananger shareInstance] getAllCodeCount] subscribeNext:^(id  _Nullable x) {
+        @strongify(self);
         if (![x isKindOfClass:[NSError class]]) {
             NSNumber *count = (NSNumber *)x;
             [self.countLabel setTitle:[NSString stringWithFormat:@"总量：%d",count.intValue] forState:UIControlStateNormal];
@@ -132,12 +155,8 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSMutableArray *arr;
     self.requestCount = 0;
     [self webview];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showVerificationView) name:@"showVerificationView" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"showVerificationView" object:nil];
-    
     UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
     exit.backgroundColor =[UIColor grayColor];
     [exit setTitle:@"退出" forState:UIControlStateNormal];
@@ -183,6 +202,7 @@
     
 }
 - (void)removeAllCode{
+    
     [[[CCNetworkMananger shareInstance] getAllCode] subscribeNext:^(id  _Nullable x) {
         if ([x isKindOfClass:[NSError class]]) {
         }
@@ -239,11 +259,13 @@
     //    NSLog(@"webViewDidStartLoad");
 }
 - (void)moveToEnd:(CGFloat)endY currentY:(CGFloat)curY pointId:(NSInteger)pointId Height:(CGFloat)height{
-    CGFloat randomTime = (float)(arc4random()%10) / 1000.0;
-    CGFloat  randomOffset = arc4random()%500;
-    //    NSLog(@"randomTIme:%f  offset:%f",randomTime,randomOffset);
+    CGFloat randomTime = (float)(arc4random()%10) / 500.0;
+//    CGFloat  randomOffset = arc4random()%600;
+    CGFloat  randomOffset = 500;
     __block CGFloat currentY = curY;
+    @weakify(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(randomTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        @strongify(self);
         currentY += randomOffset;
         [PTFakeMetaTouch fakeTouchId:pointId AtPoint:CGPointMake(currentY,height) withTouchPhase:UITouchPhaseMoved];
         if (currentY < endY) {
@@ -252,36 +274,43 @@
         else{
             [PTFakeMetaTouch fakeTouchId:pointId AtPoint:CGPointMake(currentY,height) withTouchPhase:UITouchPhaseEnded];
             NSString *script = [NSString stringWithFormat:@"document.getElementsByClassName('button')[0].offsetLeft"];
-            NSString *result = [self.webview stringByEvaluatingJavaScriptFromString:script];
-            CGFloat offsetX = UIScreen.mainScreen.bounds.size.width - 46 - 52;
+            [self.webview evaluateJavaScript:script completionHandler:^(NSNumber *result, NSError * _Nullable error) {
+                CGFloat offsetX = UIScreen.mainScreen.bounds.size.width - 46 - 52;
+                if (result.integerValue < offsetX) {
+                    [self startMove];
+                }
+                else{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        NSString *script = [NSString stringWithFormat:@"document.getElementsByClassName('stage stage3')[0].style.display"];
+                        [self.webview evaluateJavaScript:script completionHandler:^(NSString *result, NSError * _Nullable error) {
+                            if (![result isEqualToString:@"none"]) {
+                                [self refrehClick2];
+                            }
+                        }];
+                    });
+                }
+
+            }];
+//            NSString *result = [self.webview stringByEvaluatingJavaScriptFromString:script];
             //            NSLog(@"result:%@",result);
-            if (result.integerValue < offsetX) {
-                [self startMove];
-            }
-            else{
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    NSString *script = [NSString stringWithFormat:@"document.getElementsByClassName('stage stage3')[0].style.display"];
-                    NSString *result = [self.webview stringByEvaluatingJavaScriptFromString:script];
-                    if (![result isEqualToString:@"none"]) {
-                        [self refrehClick2];
-                    }
-                });
-            }
         }
     });
     
 }
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    [self startMove];
+}
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     //    NSLog(@"webViewDidFinishLoad");
     [self startMove];
-    
 }
 - (void)startMove{
     //    CGFloat height = 44 + UIApplication.sharedApplication.statusBarFrame.size.height + 65 + 26;
     CGFloat height = 44 ;
     CGFloat offsetX = UIScreen.mainScreen.bounds.size.width - 23 - 52;
-    
+    @weakify(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        @strongify(self);
         NSInteger pointId = [PTFakeMetaTouch fakeTouchId:1 AtPoint:CGPointMake(23,height) withTouchPhase:UITouchPhaseBegan];
         [self moveToEnd:offsetX currentY:23 pointId:pointId Height:height];
     });
@@ -293,20 +322,15 @@
     NSLog(@"request:%@===%@",request.URL,request.allHTTPHeaderFields);
     return YES;
 }
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = touches.allObjects.firstObject;
-    CGPoint  local = [touch locationInView:self.view];
-    NSLog(@"local.y:%f",local.x);
-    //    [self moveToOffset:local.x];
-}
+/*
 - (void)moveToOffset:(CGFloat)offset{
     
     NSString *script1 = [NSString stringWithFormat:@"document.getElementsByClassName('button')[0].style.left = %f",offset];
     NSString *script2 = [NSString stringWithFormat:@"document.getElementsByClassName('track')[0].style.width = %f",offset+26];
-    //    [self.webview stringByEvaluatingJavaScriptFromString:script1];
-    //    [self.webview stringByEvaluatingJavaScriptFromString:script2];
+        [self.webview stringByEvaluatingJavaScriptFromString:script1];
+        [self.webview stringByEvaluatingJavaScriptFromString:script2];
 }
-
+*/
 /*
 #pragma mark - Navigation
 

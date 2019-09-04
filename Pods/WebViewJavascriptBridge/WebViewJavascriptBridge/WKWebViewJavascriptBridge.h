@@ -19,6 +19,7 @@
 
 + (instancetype)bridgeForWebView:(WKWebView*)webView;
 + (void)enableLogging;
++ (id)bridgeForWebView:(id)arg1 handler:(WVJBHandler)arg2;
 
 - (void)registerHandler:(NSString*)handlerName handler:(WVJBHandler)handler;
 - (void)removeHandler:(NSString*)handlerName;

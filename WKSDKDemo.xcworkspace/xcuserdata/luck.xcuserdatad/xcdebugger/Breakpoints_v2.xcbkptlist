@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Pods/WebViewJavascriptBridge/WebViewJavascriptBridge/WebViewJavascriptBridgeBase.m"
-            timestampString = "589039764.210887"
+            timestampString = "589303883.769316"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "156"
@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Pods/WebViewJavascriptBridge/WebViewJavascriptBridge/WebViewJavascriptBridgeBase.m"
-            timestampString = "589039764.2110161"
+            timestampString = "589303883.770105"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "164"
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Pods/WebViewJavascriptBridge/WebViewJavascriptBridge/WebViewJavascriptBridgeBase.m"
-            timestampString = "589039764.211104"
+            timestampString = "589303883.77143"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "174"
@@ -57,45 +57,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/WebViewJavascriptBridge/WebViewJavascriptBridge/WebViewJavascriptBridgeBase.m"
-            timestampString = "589039764.2111599"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "-sendData:responseCallback:handlerName:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "WKSDKDemo/SliderViewController.m"
-            timestampString = "589221243.019444"
+            timestampString = "589303883.771968"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
-            landmarkName = "-removeAllCode"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WKSDKDemo/SliderViewController.m"
-            timestampString = "589221243.0296"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "192"
-            endingLineNumber = "192"
-            landmarkName = "-removeAllCode"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
+            landmarkName = "-dealloc"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

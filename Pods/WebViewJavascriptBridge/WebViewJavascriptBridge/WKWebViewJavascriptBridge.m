@@ -28,6 +28,21 @@
     [bridge reset];
     return bridge;
 }
++ (id)bridgeForWebView:(id)webView handler:(WVJBHandler)handler{
+    if ([webView isKindOfClass:[WKWebView class]]) {
+        WKWebViewJavascriptBridge* bridge = [[self alloc] init];
+        [bridge _platformSpecificSetup:webView handler:handler];
+        return bridge;
+    }
+    [NSException raise:@"BadWebViewType" format:@"Unknown web view type."];
+    return nil;
+}
+- (void) _platformSpecificSetup:(WKWebView*)webView handler:(WVJBHandler)handler {
+    _webView = webView;
+    _webView.navigationDelegate = self;
+    _base = [[WebViewJavascriptBridgeBase alloc] initWithHandler:handler resourceBundle:nil];
+    _base.delegate = self;
+}
 
 - (void)send:(id)data {
     [self send:data responseCallback:nil];
@@ -103,6 +118,13 @@
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     if (webView != _webView) { return; }
     
+    NSString *commend = [_base webViewJavascriptCheckCommand];
+    [webView evaluateJavaScript:commend completionHandler:^(NSNumber *result, NSError * _Nullable error) {
+        if (!result.boolValue) {
+            [_base injectJavascriptFile:YES];
+            [_base dispatchStartUpMessageQueue];
+        }
+    }];   
     __strong typeof(_webViewDelegate) strongDelegate = _webViewDelegate;
     if (strongDelegate && [strongDelegate respondsToSelector:@selector(webView:didFinishNavigation:)]) {
         [strongDelegate webView:webView didFinishNavigation:navigation];
@@ -138,11 +160,14 @@
     NSURL *url = navigationAction.request.URL;
     __strong typeof(_webViewDelegate) strongDelegate = _webViewDelegate;
 
-    if ([_base isWebViewJavascriptBridgeURL:url]) {
-        if ([_base isBridgeLoadedURL:url]) {
-            [_base injectJavascriptFile:YES];
-        } else if ([_base isQueueMessageURL:url]) {
-            [self WKFlushMessageQueue];
+    if ([_base isCorrectProcotocolScheme:url]) {
+        if ([_base isCorrectHost:url]) {
+//            NSString *messageQueueString = [self _evaluateJavascript:[_base webViewJavascriptFetchQueyCommand]];
+            [_webView evaluateJavaScript:[_base webViewJavascriptFetchQueyCommand] completionHandler:^(id obj, NSError * _Nullable error) {
+                NSLog(@"resutl:%@",obj);
+                [_base flushMessageQueue:obj];
+            }];
+            
         } else {
             [_base logUnkownMessage:url];
         }
