@@ -37,6 +37,62 @@
 static NSInteger errorCount = 0;
 @implementation SliderViewController
 
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self webview];
+    UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
+    exit.backgroundColor =[UIColor orangeColor];
+    if (isDefault == 1) {
+        exit.backgroundColor =[UIColor grayColor];
+    }
+    
+    [exit setTitle:@"退出" forState:UIControlStateNormal];
+    [self.view addSubview:exit];
+    [exit addTarget:self action:@selector(exitApp) forControlEvents:UIControlEventTouchUpInside];
+    [exit mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view);
+        make.height.mas_equalTo(40);
+        make.left.mas_equalTo(20);
+        make.bottom.mas_equalTo(-20);
+    }];
+    
+    UIButton *refresh = [UIButton buttonWithType:UIButtonTypeCustom];
+    refresh.backgroundColor =[UIColor greenColor];
+    if (isDefault == 1) {
+        refresh.backgroundColor =[UIColor grayColor];
+    }
+    refresh.frame = CGRectMake(100, 500, 150, 50);
+    [refresh setTitle:@"刷新" forState:UIControlStateNormal];
+    [self.view addSubview:refresh];
+    [refresh addTarget:self action:@selector(refrehClick2) forControlEvents:UIControlEventTouchUpInside];
+    
+    [refresh mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(exit.mas_top).offset(-10);
+        make.centerX.equalTo(self.view);
+        make.height.mas_equalTo(40);
+        make.left.mas_equalTo(20);
+    }];
+    
+    [self.view addSubview:self.countLabel];
+    [self.countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(refresh.mas_left);
+        make.height.mas_equalTo(40);
+        make.bottom.equalTo(refresh.mas_top).offset(-10);
+        make.width.mas_equalTo(100);
+    }];
+    
+    [self.view addSubview:self.deleteCode];
+    [self.deleteCode mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.countLabel.mas_right).offset(10);
+        make.height.mas_equalTo(40);
+        make.bottom.equalTo(refresh.mas_top).offset(-10);
+        make.width.mas_equalTo(100);
+    }];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self exitApp];
+//    });
+}
 - (void)getCode{
     self.isRequesting = YES;
     AVQuery *query = [AVQuery queryWithClassName:@"CodePool"];
@@ -66,7 +122,6 @@ static NSInteger errorCount = 0;
         }
     }];
 }
-
 - (UIButton *)countLabel{
     if (!_countLabel) {
         _countLabel  =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -93,15 +148,7 @@ static NSInteger errorCount = 0;
     }
     return _deleteCode;
 }
-- (void)showVerificationView{
-    
-}
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-    });
-}
+
 - (WKWebView *)webview{
     if (!_webview) {
         _webview = [[WKWebView alloc]initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 300)];
@@ -160,62 +207,8 @@ static NSInteger errorCount = 0;
         }
     }];
 }
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self webview];
-    UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
-    exit.backgroundColor =[UIColor orangeColor];
-    if (isDefault == 1) {
-        exit.backgroundColor =[UIColor grayColor];
-    }
-    
-    [exit setTitle:@"退出" forState:UIControlStateNormal];
-    [self.view addSubview:exit];
-    [exit addTarget:self action:@selector(exitApp) forControlEvents:UIControlEventTouchUpInside];
-    [exit mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
-        make.height.mas_equalTo(40);
-        make.left.mas_equalTo(20);
-        make.bottom.mas_equalTo(-20);
-    }];
-    
-    UIButton *refresh = [UIButton buttonWithType:UIButtonTypeCustom];
-    refresh.backgroundColor =[UIColor greenColor];
-    if (isDefault == 1) {
-        refresh.backgroundColor =[UIColor grayColor];
-    }
-    refresh.frame = CGRectMake(100, 500, 150, 50);
-    [refresh setTitle:@"刷新" forState:UIControlStateNormal];
-    [self.view addSubview:refresh];
-    [refresh addTarget:self action:@selector(refrehClick2) forControlEvents:UIControlEventTouchUpInside];
-    
-    [refresh mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(exit.mas_top).offset(-10);
-        make.centerX.equalTo(self.view);
-        make.height.mas_equalTo(40);
-        make.left.mas_equalTo(20);
-    }];
-    
-    [self.view addSubview:self.countLabel];
-    [self.countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(refresh.mas_left);
-        make.height.mas_equalTo(40);
-        make.bottom.equalTo(refresh.mas_top).offset(-10);
-        make.width.mas_equalTo(100);
-    }];
-    
-    [self.view addSubview:self.deleteCode];
-    [self.deleteCode mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.countLabel.mas_right).offset(10);
-        make.height.mas_equalTo(40);
-        make.bottom.equalTo(refresh.mas_top).offset(-10);
-        make.width.mas_equalTo(100);
-    }];
-    [self getAllCodeCount];
-    
-}
+
 - (void)removeAllCode{
-    
     [[[CCNetworkMananger shareInstance] getAllCode] subscribeNext:^(id  _Nullable x) {
         if ([x isKindOfClass:[NSError class]]) {
         }
@@ -238,6 +231,11 @@ static NSInteger errorCount = 0;
     NSString*cachePath =NSSearchPathForDirectoriesInDomains(NSCachesDirectory,NSUserDomainMask,YES).firstObject;
     if ([[NSFileManager defaultManager] fileExistsAtPath:cachePath]) {
         [[NSFileManager defaultManager] removeItemAtPath:cachePath error:nil];
+    }
+    NSString *libDir = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *webkitPath = [libDir stringByAppendingPathComponent:@"WebKit"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:webkitPath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:webkitPath error:nil];
     }
     [self cleanCacheAndCookie];
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
@@ -272,7 +270,7 @@ static NSInteger errorCount = 0;
     else{
         [self isOpenApp:@"com.slider.xh.demo333"];
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         exit(0);
     });
 }

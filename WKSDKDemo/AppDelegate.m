@@ -66,6 +66,7 @@
 
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    NSLog(@"applicationWillTerminate");
 //    [self isOpenApp:@"com.slider.xh.demo222"];
 }
 - (BOOL)isOpenApp:(NSString*)appIdentifierName
