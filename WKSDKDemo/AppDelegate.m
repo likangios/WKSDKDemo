@@ -66,7 +66,15 @@
 
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+//    [self isOpenApp:@"com.slider.xh.demo222"];
+}
+- (BOOL)isOpenApp:(NSString*)appIdentifierName
+{
+    Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
+    NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
+    BOOL isOpenApp = [workspace performSelector:@selector(openApplicationWithBundleID:) withObject:appIdentifierName];
+    
+    return isOpenApp;
 }
 
 

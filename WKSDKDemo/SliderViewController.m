@@ -27,16 +27,14 @@
 //@property(nonatomic,strong) WebViewJavascriptBridge *bridge;
 @property(nonatomic,strong) WKWebViewJavascriptBridge *bridge;
 
-@property(nonatomic,assign) NSInteger requestCount;
+//@property(nonatomic,assign) NSInteger errorCount;
 @property(nonatomic,strong)   UIButton *countLabel;
 
 @property(nonatomic,strong) UIButton *deleteCode;
 @property(nonatomic,assign) BOOL isRequesting;
 
 @end
-
-
-
+static NSInteger errorCount = 0;
 @implementation SliderViewController
 
 - (void)getCode{
@@ -117,6 +115,7 @@
         
         @weakify(self);
         self.bridge = [WKWebViewJavascriptBridge bridgeForWebView:_webview handler:^(id data, WVJBResponseCallback responseCallback) {
+            errorCount = 0;
             @strongify(self);
             CodeModel *model = [CodeModel mj_objectWithKeyValues:data[@"validResult"]];
             [[[CCNetworkMananger shareInstance] AddCode:model] subscribeNext:^(id x) {
@@ -163,7 +162,6 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.requestCount = 0;
     [self webview];
     UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
     exit.backgroundColor =[UIColor orangeColor];
@@ -268,7 +266,23 @@
 
 //刷新
 - (void)exitApp{
-    exit(0);
+    if ([[[NSBundle mainBundle] bundleIdentifier] containsString:@"333"]) {
+        [self isOpenApp:@"com.slider.xh.demo222"];
+    }
+    else{
+        [self isOpenApp:@"com.slider.xh.demo333"];
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        exit(0);
+    });
+}
+- (BOOL)isOpenApp:(NSString*)appIdentifierName
+{
+    Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
+    NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
+    BOOL isOpenApp = [workspace performSelector:@selector(openApplicationWithBundleID:) withObject:appIdentifierName];
+    
+    return isOpenApp;
 }
 - (void)webViewDidStartLoad:(UIWebView *)webView{
     //    NSLog(@"webViewDidStartLoad");
@@ -299,6 +313,10 @@
                         NSString *script = [NSString stringWithFormat:@"document.getElementsByClassName('stage stage3')[0].style.display"];
                         [self.webview evaluateJavaScript:script completionHandler:^(NSString *result, NSError * _Nullable error) {
                             if (![result isEqualToString:@"none"]) {
+                                errorCount ++;
+                                if (errorCount > 3) {
+                                    [self exitApp];
+                                }
                                 [self refrehClick2];
                             }
                         }];
