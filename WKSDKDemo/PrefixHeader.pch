@@ -9,6 +9,8 @@
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
 
+// 1 默认
+#define isDefault  1
 
 #import <AVOSCloud/AVOSCloud.h>
 #import <MJExtension.h>

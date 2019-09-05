@@ -73,7 +73,14 @@
     if (!_countLabel) {
         _countLabel  =[UIButton buttonWithType:UIButtonTypeCustom];
         [_countLabel setTitle:@"总量：0" forState:UIControlStateNormal];
-        _countLabel.backgroundColor =[UIColor grayColor];
+        if (isDefault == 1) {
+            _countLabel.backgroundColor = [UIColor grayColor];
+        }
+        else{
+            [_countLabel setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [_countLabel setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+        }
+        _countLabel.selected = YES;
         [_countLabel addTarget:self action:@selector(getAllCodeCount) forControlEvents:UIControlEventTouchUpInside];
     }
     return _countLabel;
@@ -104,7 +111,7 @@
         _webview.scrollView.bounces = NO;
         _webview.navigationDelegate = self;
         NSDate *date = [NSDate date];
-        NSTimeInterval timeinterval = [date timeIntervalSince1970] * 1000;
+        NSTimeInterval timeinterval = ([date timeIntervalSince1970] + 86400) * 1000;
         NSString *url = [NSString stringWithFormat:@"https://webcdn2.hsyuntai.com/page/app/hkyzh5_xh.html?t=%.f",timeinterval];
         [_webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
         
@@ -144,6 +151,7 @@
     return _webview;
 }
 - (void)getAllCodeCount{
+    self.countLabel.selected = !self.countLabel.selected;
     @weakify(self);
     [[[CCNetworkMananger shareInstance] getAllCodeCount] subscribeNext:^(id  _Nullable x) {
         @strongify(self);
@@ -158,7 +166,11 @@
     self.requestCount = 0;
     [self webview];
     UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
-    exit.backgroundColor =[UIColor grayColor];
+    exit.backgroundColor =[UIColor orangeColor];
+    if (isDefault == 1) {
+        exit.backgroundColor =[UIColor grayColor];
+    }
+    
     [exit setTitle:@"退出" forState:UIControlStateNormal];
     [self.view addSubview:exit];
     [exit addTarget:self action:@selector(exitApp) forControlEvents:UIControlEventTouchUpInside];
@@ -170,7 +182,10 @@
     }];
     
     UIButton *refresh = [UIButton buttonWithType:UIButtonTypeCustom];
-    refresh.backgroundColor =[UIColor grayColor];
+    refresh.backgroundColor =[UIColor greenColor];
+    if (isDefault == 1) {
+        refresh.backgroundColor =[UIColor grayColor];
+    }
     refresh.frame = CGRectMake(100, 500, 150, 50);
     [refresh setTitle:@"刷新" forState:UIControlStateNormal];
     [self.view addSubview:refresh];
