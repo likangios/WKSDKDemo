@@ -307,7 +307,7 @@ static NSInteger errorCount = 0;
                     [self startMove];
                 }
                 else{
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         NSString *script = [NSString stringWithFormat:@"document.getElementsByClassName('stage stage3')[0].style.display"];
                         [self.webview evaluateJavaScript:script completionHandler:^(NSString *result, NSError * _Nullable error) {
                             if (![result isEqualToString:@"none"]) {

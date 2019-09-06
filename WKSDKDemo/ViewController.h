@@ -12,5 +12,11 @@
 
 @property(nonatomic,strong) NSMutableArray *cacheDic;
 
+- (void)cancelPicker;
+- (void)confirmPicker;
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component;
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView;
+- (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component;
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
 @end
 
