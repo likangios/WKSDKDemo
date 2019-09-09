@@ -27,6 +27,8 @@
 }
 - (void)viewDidLoad{
     [super viewDidLoad];
+//    UIColor *defaultColor = [UIColor purpleColor];
+//    UIColor *defaultColor = [UIColor grayColor];
     /*
     self.view.backgroundColor = [UIColor whiteColor];
     CGFloat height = UIScreen.mainScreen.bounds.size.height;

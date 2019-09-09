@@ -16,7 +16,7 @@
 
 
 - (void)initAVOSCloud{
-    [AVOSCloud setApplicationId:@"IJhTnFwGR17jMSbMchDk1kq8-gzGzoHsz" clientKey:@"SYxHQzNvcBgO2ePUXlyzI7iR"];
+    [AVOSCloud setApplicationId:@"PFxe9U7m6IEOqv7Bu8htENYz-MdYXbMMI" clientKey:@"ydOlUPppCBzD40g1gFOxKt6g"];
     [AVOSCloud setAllLogsEnabled:YES];
 }
 

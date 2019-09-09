@@ -145,6 +145,7 @@ static NSInteger errorCount = 0;
         _deleteCode.backgroundColor =[UIColor grayColor];
         [_deleteCode addTarget:self action:@selector(removeAllCode) forControlEvents:UIControlEventTouchUpInside];
         _deleteCode.hidden = YES;
+        [_deleteCode actionsForTarget:self forControlEvent:UIControlEventTouchUpInside];
     }
     return _deleteCode;
 }
