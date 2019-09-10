@@ -15,6 +15,7 @@
 		8418F58E230C52DB00FEC6B6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8418F58D230C52DB00FEC6B6 /* main.m */; };
 		8418F597230D9D4A00FEC6B6 /* PTFakeTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8418F596230D9D4A00FEC6B6 /* PTFakeTouch.framework */; };
 		8418F599230D9E1200FEC6B6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8418F598230D9E1200FEC6B6 /* IOKit.framework */; };
+		842FF2BD2327F59A000B2ECA /* CodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 842FF2BC2327F59A000B2ECA /* CodeManager.m */; };
 		8435855E23181B730033CA5F /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8435855D23181B730033CA5F /* WebViewJavascriptBridge.js.txt */; };
 		84358563231C0AF80033CA5F /* SliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84358562231C0AF80033CA5F /* SliderViewController.m */; };
 		84358566231D640B0033CA5F /* CCNetworkMananger.m in Sources */ = {isa = PBXBuildFile; fileRef = 84358565231D640B0033CA5F /* CCNetworkMananger.m */; };
@@ -36,6 +37,8 @@
 		8418F58D230C52DB00FEC6B6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8418F596230D9D4A00FEC6B6 /* PTFakeTouch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PTFakeTouch.framework; sourceTree = "<group>"; };
 		8418F598230D9E1200FEC6B6 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOKit.framework; sourceTree = "<group>"; };
+		842FF2BB2327F59A000B2ECA /* CodeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CodeManager.h; sourceTree = "<group>"; };
+		842FF2BC2327F59A000B2ECA /* CodeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CodeManager.m; sourceTree = "<group>"; };
 		8435855D23181B730033CA5F /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
 		84358561231C0AF80033CA5F /* SliderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SliderViewController.h; sourceTree = "<group>"; };
 		84358562231C0AF80033CA5F /* SliderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SliderViewController.m; sourceTree = "<group>"; };
@@ -108,6 +111,8 @@
 				8435855D23181B730033CA5F /* WebViewJavascriptBridge.js.txt */,
 				8418F581230C52D800FEC6B6 /* ViewController.h */,
 				8418F582230C52D800FEC6B6 /* ViewController.m */,
+				842FF2BB2327F59A000B2ECA /* CodeManager.h */,
+				842FF2BC2327F59A000B2ECA /* CodeManager.m */,
 				84358561231C0AF80033CA5F /* SliderViewController.h */,
 				84358562231C0AF80033CA5F /* SliderViewController.m */,
 				84358567231D64380033CA5F /* CodeModel.h */,
@@ -197,15 +202,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-WKSDKDemo-checkManifestLockResult.txt",
 			);
@@ -219,15 +220,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-WKSDKDemo/Pods-WKSDKDemo-resources.sh",
 				"${PODS_ROOT}/AVOSCloud/AVOS/AVOSCloud/AVOSCloud_Art.inc",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AVOSCloud_Art.inc",
 			);
@@ -249,6 +246,7 @@
 				84358566231D640B0033CA5F /* CCNetworkMananger.m in Sources */,
 				8418F580230C52D800FEC6B6 /* AppDelegate.m in Sources */,
 				84358563231C0AF80033CA5F /* SliderViewController.m in Sources */,
+				842FF2BD2327F59A000B2ECA /* CodeManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,7 +390,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = E5EJ3R9VNE;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -405,9 +403,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.slider.xh.demo333;
+				PRODUCT_BUNDLE_IDENTIFIER = com.slider.xh.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "88e90e39-fd9b-4e43-a5af-cb6e4f0d644e";
+				PROVISIONING_PROFILE_SPECIFIER = tingshuo;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -418,7 +417,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = E5EJ3R9VNE;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -431,9 +430,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.slider.xh.demo333;
+				PRODUCT_BUNDLE_IDENTIFIER = com.slider.xh.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "88e90e39-fd9b-4e43-a5af-cb6e4f0d644e";
+				PROVISIONING_PROFILE_SPECIFIER = tingshuo;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

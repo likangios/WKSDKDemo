@@ -13,6 +13,7 @@
 #import <PTFakeTouch/PTFakeMetaTouch.h>
 #import <WebKit/WebKit.h>
 #import "CCNetworkMananger.h"
+#import "CodeManager.h"
 
 
 @interface SliderViewController ()<UIWebViewDelegate,WKUIDelegate,WKNavigationDelegate>
@@ -166,14 +167,29 @@ static NSInteger errorCount = 0;
             errorCount = 0;
             @strongify(self);
             CodeModel *model = [CodeModel mj_objectWithKeyValues:data[@"validResult"]];
-            [[[CCNetworkMananger shareInstance] AddCode:model] subscribeNext:^(id x) {
-                if ([x isKindOfClass:[NSError class]]) {
-                    NSError *error = (NSError *)x;
-                    NSLog(@"添加失败:%@",error);
-                }
-            } completed:^{
-                NSLog(@"添加完成");
-            }];
+            [[CodeManager shareInstance].codeArray addObject:model];
+            
+            if ([CodeManager shareInstance].codeArray.count > 10) {
+                NSArray *copyArray = [[CodeManager shareInstance].codeArray copy];
+                [[CodeManager shareInstance].codeArray removeAllObjects];
+                [[[CCNetworkMananger shareInstance] addCodeArray:copyArray] subscribeNext:^(id  _Nullable x) {
+                    if ([x isKindOfClass:[NSError class]]) {
+                        NSError *error = (NSError *)x;
+                        NSLog(@"添加失败:%@",error);
+                    }
+                } completed:^{
+                    NSLog(@"添加完成");
+                }];
+                
+            }
+//            [[[CCNetworkMananger shareInstance] AddCode:model] subscribeNext:^(id x) {
+//                if ([x isKindOfClass:[NSError class]]) {
+//                    NSError *error = (NSError *)x;
+//                    NSLog(@"添加失败:%@",error);
+//                }
+//            } completed:^{
+//                NSLog(@"添加完成");
+//            }];
             [self.webview reload];
         }];
         /*

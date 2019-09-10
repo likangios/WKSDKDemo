@@ -14,5 +14,6 @@
 - (RACSignal *)getAllCodeCount;
 - (RACSignal *)getAllCode;
 - (RACSignal *)removeObjects:(NSArray *)all;
+- (RACSignal *)addCodeArray:(NSArray *)codes;
 @end
 

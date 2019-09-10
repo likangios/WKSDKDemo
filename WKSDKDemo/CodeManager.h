@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface CodeManager : NSObject
-
+@property(nonatomic,strong) NSMutableArray *codeArray;
++ (instancetype)shareInstance;
 @end

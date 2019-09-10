@@ -16,7 +16,10 @@
 
 
 - (void)initAVOSCloud{
-    [AVOSCloud setApplicationId:@"PFxe9U7m6IEOqv7Bu8htENYz-MdYXbMMI" clientKey:@"ydOlUPppCBzD40g1gFOxKt6g"];
+    //XHDemo1.5
+    [AVOSCloud setApplicationId:@"piwnlM5JrKvEoXQ4wE31zanN-MdYXbMMI" clientKey:@"tmJMhCDYYlQ2RuGw5JJoIjAz"];
+    //XHDemo
+    //[AVOSCloud setApplicationId:@"PFxe9U7m6IEOqv7Bu8htENYz-MdYXbMMI" clientKey:@"ydOlUPppCBzD40g1gFOxKt6g"];
     [AVOSCloud setAllLogsEnabled:YES];
 }
 
