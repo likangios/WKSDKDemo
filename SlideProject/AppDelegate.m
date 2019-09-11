@@ -1,10 +1,12 @@
 //
 //  AppDelegate.m
-//  WKSDKDemo
+//  SlideProject
 //
-//  Created by luck on 2019/8/21.
+//  Created by luck on 2019/9/12.
 //  Copyright © 2019年 ting. All rights reserved.
 //
+
+#import "AppDelegate.h"
 
 #import "AppDelegate.h"
 #import "ViewController.h"
@@ -16,8 +18,8 @@
 
 
 - (void)initAVOSCloud{
-//    XHDemo
-    [AVOSCloud setApplicationId:@"PFxe9U7m6IEOqv7Bu8htENYz-MdYXbMMI" clientKey:@"ydOlUPppCBzD40g1gFOxKt6g"];
+    //XHDemo江湖
+    [AVOSCloud setApplicationId:@"OxJ37mBpIE2yeyCNEnqvYYW4-MdYXbMMI" clientKey:@"GSj1KdOv2qhgOMv8ccoBBsxu"];
     [AVOSCloud setAllLogsEnabled:YES];
 }
 
@@ -39,10 +41,9 @@
     self.window.rootViewController = [[UINavigationController alloc]initWithRootViewController:[[ViewController alloc]init]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-
+    
     return YES;
 }
-
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -67,16 +68,7 @@
 
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    NSLog(@"applicationWillTerminate");
-//    [self isOpenApp:@"com.slider.xh.demo222"];
-}
-- (BOOL)isOpenApp:(NSString*)appIdentifierName
-{
-    Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
-    NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
-    BOOL isOpenApp = [workspace performSelector:@selector(openApplicationWithBundleID:) withObject:appIdentifierName];
-    
-    return isOpenApp;
+    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 

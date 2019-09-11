@@ -9,7 +9,7 @@
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
 
-// 1 默认
+// 1 默认 2 听说  3 诚信 4 江湖
 #define isDefault  1
 
 #import <AVOSCloud/AVOSCloud.h>
