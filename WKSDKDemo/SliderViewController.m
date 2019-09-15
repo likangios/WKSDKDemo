@@ -48,6 +48,7 @@ static NSInteger errorCount = 0;
         exit.backgroundColor =[UIColor grayColor];
     }
     
+    
     [exit setTitle:@"退出" forState:UIControlStateNormal];
     [self.view addSubview:exit];
     [exit addTarget:self action:@selector(exitApp) forControlEvents:UIControlEventTouchUpInside];
