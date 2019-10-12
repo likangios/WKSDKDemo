@@ -38,6 +38,23 @@ static CCNetworkMananger *_instance;
         }];
     }];
 }
+- (RACSignal *)removeAll{
+    return  [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        AVObject *avobj = [AVObject objectWithClassName:@"CodePool"];
+        [avobj deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (error) {
+                [subscriber sendNext:error];
+            }
+            else{
+                [subscriber sendNext:@(succeeded)];
+            }
+            [subscriber sendCompleted];
+        }];
+        return [RACDisposable disposableWithBlock:^{
+            
+        }];
+    }];
+}
 
 - (RACSignal *)getAllCodeCount{
     return  [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
