@@ -5,7 +5,6 @@
 //  Created by luck on 2019/8/21.
 //  Copyright © 2019年 ting. All rights reserved.
 //
-
 #import "ViewController.h"
 #import "SliderViewController.h"
 
@@ -27,6 +26,10 @@
 }
 - (void)viewDidLoad{
     [super viewDidLoad];
+    UIButton *button;
+    if (button.isSelected) {
+        
+    }
 //    UIColor *defaultColor = [UIColor purpleColor];
 //    UIColor *defaultColor = [UIColor grayColor];
     /*
@@ -64,13 +67,38 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 //    UIView *view = [self.view viewWithTag:567];
 //    view.hidden = NO;
+//    double new = 8 * 3600;
+    NSTimeInterval  time = [[NSDate date] timeIntervalSince1970];
+//    NSInteger shijc =  time + 8 * 3600000 - ((time + 8 * 3600000)/86400000 * 86400000);
+//    NSLog(@"time:%f",time);
+//    NSLog(@"shijc:%f",shijc);
+    
+    NSCalendar *greCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    
+    NSTimeZone *timeZone = [[NSTimeZone alloc] initWithName:@"Asia/Shanghai"];
+    [greCalendar setTimeZone: timeZone];
+    
+    NSDateComponents *dateComponents = [greCalendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay  fromDate:[NSDate date]];
+    
+    //  定义一个NSDateComponents对象，设置一个时间点
+    NSDateComponents *dateComponentsForDate = [[NSDateComponents alloc] init];
+    [dateComponentsForDate setDay:dateComponents.day];
+    [dateComponentsForDate setMonth:dateComponents.month];
+    [dateComponentsForDate setYear:dateComponents.year];
+    [dateComponentsForDate setHour:0];
+    [dateComponentsForDate setMinute:14];
+    [dateComponentsForDate setSecond:00];
+    NSDate *dateFromDateComponentsForDate = [greCalendar dateFromComponents:dateComponentsForDate];
+    NSTimeInterval  time2 = [dateFromDateComponentsForDate timeIntervalSince1970];
+    NSLog(@"%f",time);
+    NSLog(@"%f",time2);
 }
 - (void)cancelPicker{
     UIView *view = [self.view viewWithTag:567];
     view.hidden = NO;
 }
 - (void)confirmPicker{
-    NSInteger time = [[NSDate date] timeIntervalSince1970];
+    NSInteger time = [[NSDate date] timeIntervalSince1970] * 1000;
     NSInteger shijc =  time % 86400 + 8 * 3600;
     NSLog(@"当前时间：%ld",shijc);
     NSLog(@"选择开始日期：%ld：%ld %ld",self.firstRow,self.secondRow,self.thirdRow);

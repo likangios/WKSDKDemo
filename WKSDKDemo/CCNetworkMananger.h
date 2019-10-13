@@ -10,7 +10,7 @@
 #import "CodeModel.h"
 @interface CCNetworkMananger : NSObject
 + (instancetype)shareInstance;
-- (RACSignal *)AddCode:(CodeModel *)model;
+//- (RACSignal *)AddCode:(CodeModel *)model;
 - (RACSignal *)getAllCodeCount;
 - (RACSignal *)getAllCode;
 - (RACSignal *)removeObjects:(NSArray *)all;

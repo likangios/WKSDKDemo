@@ -28,6 +28,8 @@
 //@property(nonatomic,strong) WebViewJavascriptBridge *bridge;
 @property(nonatomic,strong) WKWebViewJavascriptBridge *bridge;
 
+@property(nonatomic,assign) CGFloat rate;
+
 //@property(nonatomic,assign) NSInteger errorCount;
 @property(nonatomic,strong)   UIButton *countLabel;
 
@@ -99,15 +101,18 @@ static NSInteger errorCount = 0;
     self.isRequesting = YES;
     AVQuery *query = [AVQuery queryWithClassName:@"CodePool"];
     [query orderByAscending:@"createdAt"];
-    [query selectKeys:@[@"slider_token", @"slider_sessionid",@"slider_sig"]];
-    query.limit = 10;
+//    [query selectKeys:@[@"slider_token", @"slider_sessionid",@"slider_sig"]];
+    [query selectKeys:@[@"list"]];
+    query.limit = 2;
+    
     [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
         if (!error) {
             NSMutableArray *array = [NSMutableArray array];
             [objects enumerateObjectsUsingBlock:^(AVObject *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSDictionary *dic = [obj dictionaryForObject];
-                [array addObject:dic];
+                [array addObjectsFromArray:dic[@"list"]];
             }];
+            NSLog(@"array:%@",array);
         }
         self.isRequesting = NO;
         [self deleteObjes:objects];
@@ -169,8 +174,7 @@ static NSInteger errorCount = 0;
             @strongify(self);
             CodeModel *model = [CodeModel mj_objectWithKeyValues:data[@"validResult"]];
             [[CodeManager shareInstance].codeArray addObject:model];
-            
-            if ([CodeManager shareInstance].codeArray.count > 10) {
+            if ([CodeManager shareInstance].codeArray.count > 19) {
                 NSArray *copyArray = [[CodeManager shareInstance].codeArray copy];
                 [[CodeManager shareInstance].codeArray removeAllObjects];
                 [[[CCNetworkMananger shareInstance] addCodeArray:copyArray] subscribeNext:^(id  _Nullable x) {
@@ -183,14 +187,6 @@ static NSInteger errorCount = 0;
                 }];
                 
             }
-//            [[[CCNetworkMananger shareInstance] AddCode:model] subscribeNext:^(id x) {
-//                if ([x isKindOfClass:[NSError class]]) {
-//                    NSError *error = (NSError *)x;
-//                    NSLog(@"添加失败:%@",error);
-//                }
-//            } completed:^{
-//                NSLog(@"添加完成");
-//            }];
             [self.webview reload];
         }];
         /*
@@ -215,13 +211,14 @@ static NSInteger errorCount = 0;
     return _webview;
 }
 - (void)getAllCodeCount{
+//    [self getCode];
     self.countLabel.selected = !self.countLabel.selected;
     @weakify(self);
     [[[CCNetworkMananger shareInstance] getAllCodeCount] subscribeNext:^(id  _Nullable x) {
         @strongify(self);
         if (![x isKindOfClass:[NSError class]]) {
             NSNumber *count = (NSNumber *)x;
-            [self.countLabel setTitle:[NSString stringWithFormat:@"总量：%d",count.intValue] forState:UIControlStateNormal];
+            [self.countLabel setTitle:[NSString stringWithFormat:@"总量：%d",count.intValue * 20] forState:UIControlStateNormal];
         }
     }];
 }

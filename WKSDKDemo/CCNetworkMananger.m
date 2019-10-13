@@ -76,42 +76,15 @@ static CCNetworkMananger *_instance;
 }
 - (RACSignal *)addCodeArray:(NSArray *)codes{
     
-    NSMutableArray *avobjArray = [NSMutableArray array];
+    NSMutableArray *listArray = [NSMutableArray array];
     [codes enumerateObjectsUsingBlock:^(CodeModel  *model, NSUInteger idx, BOOL * _Nonnull stop) {
         NSDictionary *dic = [model mj_keyValues];
-        AVObject *avobj = [AVObject objectWithClassName:@"CodePool"];
-        [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            if (![key isEqualToString:@"objectId"]) {
-                [avobj setObject:obj forKey:key];
-            }
-        }];
-        [avobjArray addObject:avobj];
+        [listArray addObject:dic];
     }];
-    return  [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
-        [AVObject saveAllInBackground:avobjArray block:^(BOOL succeeded, NSError * _Nullable error) {
-            if (error) {
-                [subscriber sendNext:error];
-            }
-            else{
-                [subscriber sendNext:@(YES)];
-            }
-            [subscriber sendCompleted];
-        }];
-        return [RACDisposable disposableWithBlock:^{
-            
-        }];
-    }];
+    AVObject *avobj = [AVObject objectWithClassName:@"CodePool"];
+    [avobj setObject:listArray  forKey:@"list"];
     
-}
-- (RACSignal *)AddCode:(CodeModel *)model{
     return  [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
-        AVObject *avobj = [AVObject objectWithClassName:@"CodePool"];
-        NSDictionary *dic = [model mj_keyValues];
-        [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            if (![key isEqualToString:@"objectId"]) {
-                [avobj setObject:obj forKey:key];
-            }
-        }];
         [avobj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             if (error) {
                 [subscriber sendNext:error];
@@ -126,5 +99,28 @@ static CCNetworkMananger *_instance;
         }];
     }];
 }
+//- (RACSignal *)AddCode:(CodeModel *)model{
+//    return  [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+//        AVObject *avobj = [AVObject objectWithClassName:@"CodePool"];
+//        NSDictionary *dic = [model mj_keyValues];
+//        [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+//            if (![key isEqualToString:@"objectId"]) {
+//                [avobj setObject:obj forKey:key];
+//            }
+//        }];
+//        [avobj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+//            if (error) {
+//                [subscriber sendNext:error];
+//            }
+//            else{
+//                [subscriber sendNext:@(YES)];
+//            }
+//            [subscriber sendCompleted];
+//        }];
+//        return [RACDisposable disposableWithBlock:^{
+//
+//        }];
+//    }];
+//}
 
 @end
