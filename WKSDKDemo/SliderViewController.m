@@ -151,7 +151,7 @@ static NSInteger errorCount = 0;
         [_deleteCode setTitle:@"清空验证码" forState:UIControlStateNormal];
         _deleteCode.backgroundColor =[UIColor grayColor];
         [_deleteCode addTarget:self action:@selector(removeAllCode) forControlEvents:UIControlEventTouchUpInside];
-        _deleteCode.hidden = YES;
+//        _deleteCode.hidden = YES;
         [_deleteCode actionsForTarget:self forControlEvent:UIControlEventTouchUpInside];
     }
     return _deleteCode;
@@ -224,6 +224,12 @@ static NSInteger errorCount = 0;
 }
 
 - (void)removeAllCode{
+//    [[[CCNetworkMananger shareInstance] removeAll] subscribeNext:^(id  _Nullable x) {
+//        if ([x isKindOfClass:[NSError class]]) {
+//        }
+//        else{
+//        }
+//    }];
     [[[CCNetworkMananger shareInstance] getAllCode] subscribeNext:^(id  _Nullable x) {
         if ([x isKindOfClass:[NSError class]]) {
         }
@@ -351,8 +357,8 @@ static NSInteger errorCount = 0;
     [self startMove];
 }
 - (void)startMove{
-    //    CGFloat height = 44 + UIApplication.sharedApplication.statusBarFrame.size.height + 65 + 26;
-    CGFloat height = 44 ;
+        CGFloat height = UIApplication.sharedApplication.statusBarFrame.size.height + 26;
+//    CGFloat height = 44 ;
     CGFloat offsetX = UIScreen.mainScreen.bounds.size.width - 23 - 52;
     @weakify(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
