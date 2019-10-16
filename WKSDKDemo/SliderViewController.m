@@ -300,7 +300,6 @@ static NSInteger errorCount = 0;
     Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
     NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
     BOOL isOpenApp = [workspace performSelector:@selector(openApplicationWithBundleID:) withObject:appIdentifierName];
-    
     return isOpenApp;
 }
 - (void)webViewDidStartLoad:(UIWebView *)webView{
@@ -333,9 +332,9 @@ static NSInteger errorCount = 0;
                         [self.webview evaluateJavaScript:script completionHandler:^(NSString *result, NSError * _Nullable error) {
                             if (![result isEqualToString:@"none"]) {
                                 errorCount ++;
-                                if (errorCount > 3) {
-                                    [self exitApp];
-                                }
+//                                if (errorCount > 3) {
+//                                    [self exitApp];
+//                                }
                                 [self refrehClick2];
                             }
                         }];
