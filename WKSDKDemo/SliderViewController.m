@@ -35,14 +35,33 @@
 
 @property(nonatomic,strong) UIButton *deleteCode;
 @property(nonatomic,assign) BOOL isRequesting;
+@property (nonatomic,strong) dispatch_source_t timer;
 
 @end
 static NSInteger errorCount = 0;
 @implementation SliderViewController
 
-
+- (void)cleanCodel{
+    [[[CCNetworkMananger shareInstance] getGuoQiCode] subscribeNext:^(NSArray * x) {
+        if ([x isKindOfClass:[NSArray class]]) {
+            [[[CCNetworkMananger shareInstance] removeObjects:x] subscribeNext:^(id  _Nullable x) {
+            }];
+        }
+    }];
+}
+- (void)dealloc{
+    NSLog(@"====================dealloc");
+    dispatch_cancel(self.timer);
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(0, 0));
+    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC, 0.0 * NSEC_PER_SEC);
+    dispatch_source_set_event_handler(self.timer, ^{
+        [self cleanCodel];
+    });
+    dispatch_resume(self.timer);
+
     [self webview];
     UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
     exit.backgroundColor =[UIColor orangeColor];
@@ -243,9 +262,6 @@ static NSInteger errorCount = 0;
             }];
         }
     }];
-}
-- (void)dealloc{
-    NSLog(@"====================dealloc");
 }
 - (void)refrehClick2{
     NSLog(@"refrehClick2");

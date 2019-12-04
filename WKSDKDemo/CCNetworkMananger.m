@@ -91,6 +91,27 @@ static CCNetworkMananger *_instance;
         }];
     }];
 }
+- (RACSignal *)getGuoQiCode{
+    return  [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        AVQuery *query = [AVQuery queryWithClassName:@"CodePool"];
+//        [query orderByAscending:@"createdAt"];
+        NSDate *date = [NSDate dateWithTimeIntervalSince1970:[NSDate new].timeIntervalSince1970 - 240];
+        NSLog(@"searchDate:%@",date);
+        [query whereKey:@"createdAt" lessThan:date];
+        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+            if (error) {
+                [subscriber sendNext:error];
+            }
+            else{
+                [subscriber sendNext:objects];
+            }
+            [subscriber sendCompleted];
+        }];
+        return [RACDisposable disposableWithBlock:^{
+            
+        }];
+    }];
+}
 - (RACSignal *)addCodeArray:(NSArray *)codes{
     
     NSMutableArray *listArray = [NSMutableArray array];

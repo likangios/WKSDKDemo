@@ -7,6 +7,13 @@
 //
 #import "ViewController.h"
 #import "SliderViewController.h"
+#import "CCNetworkMananger.h"
+#import <sys/stat.h>
+#import <dlfcn.h>
+#import <stdlib.h>
+#import <mach-o/dyld.h>
+
+
 
 @interface ViewController ()<UIPickerViewDelegate,UIPickerViewDataSource>
 
@@ -24,12 +31,65 @@
         [self.navigationController pushViewController:slider animated:NO];
     });
 }
+- (void)isOK1 {
+    //可能存在hook了NSFileManager方法，此处用底层C stat去检测
+    //    /Library/MobileSubstrate/MobileSubstrate.dylib 最重要的越狱文件，几乎所有的越狱机都会安装MobileSubstrate
+    //    /Applications/Cydia.app/ /var/lib/cydia/绝大多数越狱机都会安装
+    struct stat stat_info;
+    if (0 == stat("/Library/MobileSubstrate/MobileSubstrate.dylib", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/Applications/Cydia.app", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/var/lib/cydia/", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/var/cache/apt", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/var/lib/apt", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/etc/apt", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/bin/bash", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/bin/sh", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/usr/sbin/sshd", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/usr/libexec/ssh-keysign", &stat_info)) {
+        exit(0);
+    }
+    if (0 == stat("/etc/ssh/sshd_config", &stat_info)) {
+        exit(0);
+    }
+}
+void printEnv(void){
+    char *env = getenv("DYLD_INSERT_LIBRARIES");
+    if (env != NULL) {
+        exit(0);
+    }
+}
+void checkDylibs(void){
+    uint32_t count = _dyld_image_count();
+    for (uint32_t i = 0 ; i < count; ++i) {
+        NSString *name = [[NSString alloc]initWithUTF8String:_dyld_get_image_name(i)];
+        if ([name containsString:@"MobileSubstrate.dylib"]) {
+            exit(0);
+        }
+    }
+}
 - (void)viewDidLoad{
     [super viewDidLoad];
-    UIButton *button;
-    if (button.isSelected) {
-        
-    }
+    [self isOK1];
+    printEnv();
+    checkDylibs();
 //    UIColor *defaultColor = [UIColor purpleColor];
 //    UIColor *defaultColor = [UIColor grayColor];
     /*

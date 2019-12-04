@@ -16,5 +16,6 @@
 - (RACSignal *)removeObjects:(NSArray *)all;
 - (RACSignal *)addCodeArray:(NSArray *)codes;
 - (RACSignal *)removeAll;
+- (RACSignal *)getGuoQiCode;
 @end
 
